@@ -1,24 +1,56 @@
-import React, {type PropsWithChildren} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import React, {useState, type PropsWithChildren} from 'react';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 // TODO no PropsWithChildren
 const Card: React.FC<
   PropsWithChildren<{
-    description: string;
+    insights: string[];
     emoji: string;
   }>
-> = ({description, emoji}) => {
+> = ({insights, emoji}) => {
+  const [currentInsight, setCurrentInsight] = useState(0);
+  const changeInsight = () => {
+    setCurrentInsight(
+      prevInsightIndex => (prevInsightIndex + 1) % insights.length,
+    );
+  };
   return (
     <LinearGradient
-      colors={['rgba(24, 24, 24, 1)', 'rgba(24, 24, 24, 0)']}
-      style={[styles.container, styles.linearGradient]}>
-      <View style={styles.mediaSection}>
-        <Text style={styles.mediaSectionText}>{emoji}</Text>
-      </View>
-      <View>
-        <Text style={styles.description}>{description}</Text>
-      </View>
+      colors={[
+        '#AFAFAF80',
+        '#AFAFAF80',
+        '#21212100',
+        '#AFAFAF70',
+        '#21212150',
+        '#AFAFAF50',
+      ]}
+      start={{x: 0.0, y: 1.0}}
+      end={{x: 1.0, y: 1.0}}
+      style={{
+        // height: 48,
+        // width: 200,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 24,
+        // width: 200,
+        padding: 2,
+        borderRadius: 7,
+      }}>
+      <TouchableOpacity onPress={changeInsight} style={styles.containerFake}>
+        <LinearGradient
+          colors={['rgba(24, 24, 24, 1)', 'rgba(24, 24, 24, 0.2)']}
+          style={[styles.container, styles.linearGradient]}>
+          <View style={styles.mediaSectionWrapper}>
+            <Text style={styles.mediaSectionText}>{emoji}</Text>
+          </View>
+          <View style={styles.descriptionWrapper}>
+            <Text style={styles.descriptionText}>
+              {insights[currentInsight]}
+            </Text>
+          </View>
+        </LinearGradient>
+      </TouchableOpacity>
     </LinearGradient>
   );
 };
@@ -28,23 +60,35 @@ const defaultTextStyling = {
   fontFamily: 'Inter',
 };
 const styles = StyleSheet.create({
+  containerFake: {
+    backgroundColor: '#000',
+    flexDirection: 'row',
+    borderRadius: 8,
+    marginLeft: 1,
+    marginRight: 1,
+  },
   container: {
-    marginTop: 32, // This should go to the wrapper instead
+    // marginTop: 32, // This should go to the wrapper instead
     flexDirection: 'row',
     borderWidth: 1,
-    borderRadius: 10,
+    borderRadius: 8,
     paddingVertical: 16,
     paddingHorizontal: 16,
+    flex: 1,
   },
-
-  description: {
+  descriptionWrapper: {
+    flex: 1,
+  },
+  descriptionText: {
     fontSize: 15,
     lineHeight: 20,
     fontWeight: '400',
     fontStyle: 'normal',
+    flex: 1,
+    flexWrap: 'wrap',
     ...defaultTextStyling,
   },
-  mediaSection: {
+  mediaSectionWrapper: {
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
