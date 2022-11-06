@@ -8,6 +8,7 @@ export interface CardProps {
 }
 const Card: React.FC<CardProps> = ({insights, emoji}) => {
   const [currentInsight, setCurrentInsight] = useState(0);
+  // TODO interpolate angle value to give a shiny effect when pressing
   const changeInsight = () => {
     setCurrentInsight(
       prevInsightIndex => (prevInsightIndex + 1) % insights.length,
@@ -25,6 +26,9 @@ const Card: React.FC<CardProps> = ({insights, emoji}) => {
       ]}
       start={{x: 0.0, y: 1.0}}
       end={{x: 1.0, y: 1.0}}
+      useAngle={true}
+      angle={30}
+      angleCenter={{x: 0.5, y: 0.5}}
       style={{
         // height: 48,
         // width: 200,

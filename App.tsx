@@ -1,9 +1,15 @@
 import React from 'react';
-import {SafeAreaView, ScrollView, StyleSheet} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 
-import Card from './components/Card';
+import CardStack from './components/CardStack';
 
-const data = [
+export interface PortfolioInformation {
+  id: number;
+  insights: string[];
+  emoji: string;
+}
+
+const data: PortfolioInformation[] = [
   {
     id: 1,
     insights: [
@@ -42,12 +48,9 @@ const data = [
 const App = () => {
   return (
     <SafeAreaView style={[styles.container, styles.background]}>
-      <ScrollView contentInsetAdjustmentBehavior="automatic">
-        {/* TODO create a card stack component */}
-        {data.map(({id, insights, emoji}) => {
-          return <Card key={id} insights={insights} emoji={emoji} />;
-        })}
-      </ScrollView>
+      <View>
+        <CardStack cards={data} />
+      </View>
     </SafeAreaView>
   );
 };
@@ -57,6 +60,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#1E1E1E',
   },
   container: {
+    paddingTop: 80,
     paddingHorizontal: 24,
     height: '100%',
   },
