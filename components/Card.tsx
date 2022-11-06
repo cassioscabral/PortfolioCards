@@ -1,10 +1,11 @@
-import React, {useState} from 'react';
-import {StyleSheet, Text, TouchableHighlight, View} from 'react-native';
+import React from 'react';
+import {Image, StyleSheet, Text, TouchableHighlight, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {theme} from '../src/theme';
 export interface CardProps {
-  insights: string[];
+  insight: string;
   emoji: string;
+  imageUrl?: string;
   onPress: () => void;
 }
 
@@ -17,13 +18,7 @@ const borderGradientColors = [
   '#AFAFAF50',
 ];
 
-const Card: React.FC<CardProps> = ({insights, emoji, onPress}) => {
-  const [currentInsight, setCurrentInsight] = useState(0);
-  const changeInsight = () => {
-    setCurrentInsight(
-      prevInsightIndex => (prevInsightIndex + 1) % insights.length,
-    );
-  };
+const Card: React.FC<CardProps> = ({insight, emoji, imageUrl, onPress}) => {
   return (
     <LinearGradient
       colors={borderGradientColors}
@@ -46,12 +41,14 @@ const Card: React.FC<CardProps> = ({insights, emoji, onPress}) => {
           colors={['rgba(24, 24, 24, 1)', 'rgba(24, 24, 24, 0.2)']}
           style={[styles.container]}>
           <View style={styles.mediaSectionWrapper}>
-            <Text style={styles.mediaSectionText}>{emoji}</Text>
+            {imageUrl ? (
+              <Image source={{uri: imageUrl, width: 30, height: 30}} />
+            ) : (
+              <Text style={styles.mediaSectionText}>{emoji}</Text>
+            )}
           </View>
           <View style={styles.descriptionWrapper}>
-            <Text style={styles.descriptionText}>
-              {insights[currentInsight]}
-            </Text>
+            <Text style={styles.descriptionText}>{insight}</Text>
           </View>
         </LinearGradient>
       </TouchableHighlight>
