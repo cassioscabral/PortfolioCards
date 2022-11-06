@@ -4,6 +4,7 @@ import LinearGradient from 'react-native-linear-gradient';
 export interface CardProps {
   insights: string[];
   emoji: string;
+  onPress: () => void;
 }
 
 const borderGradientColors = [
@@ -15,7 +16,7 @@ const borderGradientColors = [
   '#AFAFAF50',
 ];
 
-const Card: React.FC<CardProps> = ({insights, emoji}) => {
+const Card: React.FC<CardProps> = ({insights, emoji, onPress}) => {
   const [currentInsight, setCurrentInsight] = useState(0);
   const changeInsight = () => {
     setCurrentInsight(
@@ -36,7 +37,10 @@ const Card: React.FC<CardProps> = ({insights, emoji}) => {
         borderRadius: 16,
         padding: 1,
       }}>
-      <TouchableHighlight onPress={changeInsight} style={styles.containerFake}>
+      <TouchableHighlight
+        underlayColor={'rgba(24, 24, 24)'}
+        onPress={onPress}
+        style={styles.containerFake}>
         <LinearGradient
           colors={['rgba(24, 24, 24, 1)', 'rgba(24, 24, 24, 0.2)']}
           style={[styles.container]}>
@@ -65,6 +69,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(24, 24, 24, 1)',
     flexDirection: 'row',
     borderRadius: 15,
+    opacity: 1,
   },
   container: {
     flexDirection: 'row',

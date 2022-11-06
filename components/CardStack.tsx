@@ -1,16 +1,11 @@
 import React, {useRef} from 'react';
-import {Dimensions, StyleProp, View, ViewProps, ViewStyle} from 'react-native';
-import {
-  Directions,
-  FlingGestureHandler,
-  GestureHandlerRootView,
-} from 'react-native-gesture-handler';
+import {Dimensions, View} from 'react-native';
 
 import {PortfolioInformation} from '../App';
 import Card from './Card';
 import Carousel, {ICarouselInstance} from 'react-native-reanimated-carousel';
-import {FadeInRight} from 'react-native-reanimated';
-import Animated, {AnimateProps} from 'react-native-reanimated';
+import {FadeInRight, FadeOutLeft} from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 
 export interface CardStackProps {
   cards: PortfolioInformation[];
@@ -45,15 +40,18 @@ const CardStack: React.FC<CardStackProps> = ({cards}) => {
         ref={carouselRef}
         customConfig={() => ({type: 'positive', viewCount})}
         renderItem={({index, item}) => (
-          <SBItem
-            index={index}
-            key={index}
-            onActivated={() => carouselRef.current?.next()}
+          <Animated.View
+            style={{flex: 1}}
+            exiting={FadeOutLeft.delay((viewCount - index) * 100).duration(600)}
             entering={FadeInRight.delay((viewCount - index) * 100).duration(
-              200,
+              400,
             )}>
-            <Card insights={item.insights} emoji={item.emoji} />
-          </SBItem>
+            <Card
+              onPress={() => carouselRef.current?.next()}
+              insights={item.insights}
+              emoji={item.emoji}
+            />
+          </Animated.View>
         )}
       />
     </View>
@@ -61,24 +59,3 @@ const CardStack: React.FC<CardStackProps> = ({cards}) => {
 };
 
 export default CardStack;
-
-interface SBItemProps extends AnimateProps<ViewProps> {
-  style?: StyleProp<ViewStyle>;
-  index: number;
-  pretty?: boolean;
-  onActivated?: () => void;
-}
-
-// TODO move to a separate file
-export const SBItem: React.FC<SBItemProps> = props => {
-  const {children, onActivated, ...animatedViewProps} = props;
-  return (
-    <GestureHandlerRootView style={{flex: 1}}>
-      <FlingGestureHandler direction={Directions.UP} onActivated={onActivated}>
-        <Animated.View style={{flex: 1}} {...animatedViewProps}>
-          {children}
-        </Animated.View>
-      </FlingGestureHandler>
-    </GestureHandlerRootView>
-  );
-};
