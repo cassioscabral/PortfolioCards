@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableHighlight, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import {theme} from '../src/theme';
 export interface CardProps {
   insights: string[];
   emoji: string;
@@ -60,7 +61,8 @@ const Card: React.FC<CardProps> = ({insights, emoji, onPress}) => {
 
 const defaultTextStyling = {
   color: 'rgba(200, 200, 200, 1)',
-  fontFamily: 'Inter',
+  fontFamily: theme.fontFamilyRegular,
+  // fontFamily: 'Inter',
 };
 // Internal border radius is equal to the external one minus the spacing between them
 // 16(figma) - 1(padding to create border of 1 width) = 15
@@ -70,6 +72,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderRadius: 15,
     opacity: 1,
+    paddingBottom: 8,
   },
   container: {
     flexDirection: 'row',
@@ -87,7 +90,6 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     fontWeight: '400',
     fontStyle: 'normal',
-    flex: 1,
     flexWrap: 'wrap',
   },
   mediaSectionWrapper: {
