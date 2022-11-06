@@ -9,13 +9,20 @@ export interface CardProps {
   onPress: () => void;
 }
 
+const shadesOfBorderColor = [
+  'rgba(255, 255, 255, 0.6)',
+  'rgba(173, 173, 173, 0.8)',
+  'rgba(33, 33, 33, 0.8)',
+  'rgba(255, 255, 255, 0.2)',
+];
+
 const borderGradientColors = [
-  '#AFAFAF80',
-  '#AFAFAF80',
-  '#21212100',
-  '#AFAFAF70',
-  '#21212150',
-  '#AFAFAF50',
+  shadesOfBorderColor[0],
+  shadesOfBorderColor[2],
+  shadesOfBorderColor[2],
+  shadesOfBorderColor[1],
+  shadesOfBorderColor[1],
+  shadesOfBorderColor[3],
 ];
 
 const Card: React.FC<CardProps> = ({insight, emoji, imageUrl, onPress}) => {
@@ -25,21 +32,21 @@ const Card: React.FC<CardProps> = ({insight, emoji, imageUrl, onPress}) => {
       start={{x: 0.0, y: 1.0}}
       end={{x: 1.0, y: 1.0}}
       useAngle={true}
-      angle={30}
+      angle={13}
       angleCenter={{x: 0.3, y: 0.5}}
-      style={{
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 16,
-        padding: 1,
-      }}>
+      style={styles.cardWrapper}>
       <TouchableHighlight
-        underlayColor={'rgba(24, 24, 24)'}
+        underlayColor={theme.colors.darkBackgroundAccent}
         onPress={onPress}
-        style={styles.containerFake}>
+        style={styles.touchable}>
         <LinearGradient
-          colors={['rgba(24, 24, 24, 1)', 'rgba(24, 24, 24, 0.2)']}
-          style={[styles.container]}>
+          colors={[
+            // on Figma there's a linear gradient with backdrop-filter blur which is not supported by react-native. This is a workaround to give a similar effect.
+            '#323232', // brighter color to give a contrast
+            '#282828',
+            '#212121', // desired linear gradient color
+          ]}
+          style={[styles.mainContainer]}>
           <View style={styles.mediaSectionWrapper}>
             {imageUrl ? (
               <Image source={{uri: imageUrl, width: 30, height: 30}} />
@@ -56,34 +63,40 @@ const Card: React.FC<CardProps> = ({insight, emoji, imageUrl, onPress}) => {
   );
 };
 
-const defaultTextStyling = {
-  color: 'rgba(200, 200, 200, 1)',
-  fontFamily: theme.fontFamilyRegular,
-  // fontFamily: 'Inter',
-};
-// Internal border radius is equal to the external one minus the spacing between them
-// 16(figma) - 1(padding to create border of 1 width) = 15
+/* Internal border radius is equal to the external one minus the spacing between them
+/--------
+|  ______
+| | <- inner border radius == outer border radius - desidered border width
+| |
+ 16(desired border in figma) - 1(padding to create border of 1 width) = 15 (inner border radius)
+*/
 const styles = StyleSheet.create({
-  containerFake: {
-    backgroundColor: 'rgba(24, 24, 24, 1)',
-    flexDirection: 'row',
-    borderRadius: 15,
-    opacity: 1,
-    paddingBottom: 8,
+  cardWrapper: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 16,
+    padding: 1,
   },
-  container: {
+  touchable: {
     flexDirection: 'row',
     borderRadius: 15,
-    paddingVertical: 16,
+  },
+  mainContainer: {
+    flexDirection: 'row',
+    borderRadius: 15,
+    paddingTop: 16,
     paddingHorizontal: 16,
+    paddingBottom: 32,
     flex: 1,
   },
   descriptionWrapper: {
     flex: 1,
   },
   descriptionText: {
-    ...defaultTextStyling,
     fontSize: 15,
+    color: theme.colors.textColor,
+    fontFamily: theme.fontFamilyRegular,
+
     lineHeight: 20,
     fontWeight: '400',
     fontStyle: 'normal',

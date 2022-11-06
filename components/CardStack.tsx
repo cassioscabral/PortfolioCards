@@ -1,5 +1,5 @@
 import React, {useRef} from 'react';
-import {Dimensions, View} from 'react-native';
+import {Dimensions, StyleSheet, View} from 'react-native';
 
 import {PortfolioInformation} from '../App';
 import Card from './Card';
@@ -10,19 +10,16 @@ import Animated from 'react-native-reanimated';
 export interface CardStackProps {
   cards: PortfolioInformation[];
 }
+
 const CardStack: React.FC<CardStackProps> = ({cards}) => {
   const width = Dimensions.get('window').width;
   let carouselRef = useRef<ICarouselInstance>(null);
   const viewCount = cards.length - 1;
 
   return (
-    <View style={{flex: 1}}>
+    <View style={styles.cardStackWrapper}>
       <Carousel
-        style={{
-          width: '100%',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
+        style={styles.carousel}
         width={width * 0.88}
         height={380}
         pagingEnabled={true}
@@ -35,21 +32,22 @@ const CardStack: React.FC<CardStackProps> = ({cards}) => {
         vertical={true}
         modeConfig={{
           stackInterval: 8,
-          opacityInterval: 0.1,
+          opacityInterval: 0.25,
         }}
         ref={carouselRef}
         customConfig={() => ({type: 'positive', viewCount})}
         renderItem={({index, item}) => (
           <Animated.View
-            style={{flex: 1}}
-            exiting={FadeOutLeft.delay((viewCount - index) * 100).duration(600)}
-            entering={FadeInRight.delay((viewCount - index) * 100).duration(
+            style={styles.carouseItem}
+            exiting={FadeOutLeft.delay((viewCount - index) * 400).duration(600)}
+            entering={FadeInRight.delay((viewCount - index) * 400).duration(
               400,
             )}>
             <Card
               onPress={() => carouselRef.current?.next()}
-              insights={item.insights}
+              insight={item.insight}
               emoji={item.emoji}
+              imageUrl={item?.imageUrl}
             />
           </Animated.View>
         )}
@@ -57,5 +55,19 @@ const CardStack: React.FC<CardStackProps> = ({cards}) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  cardStackWrapper: {
+    flex: 1,
+  },
+  carousel: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  carouseItem: {
+    flex: 1,
+  },
+});
 
 export default CardStack;
