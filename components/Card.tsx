@@ -1,14 +1,12 @@
-import React, {useState, type PropsWithChildren} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, Text, TouchableHighlight, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
-// TODO no PropsWithChildren
-const Card: React.FC<
-  PropsWithChildren<{
-    insights: string[];
-    emoji: string;
-  }>
-> = ({insights, emoji}) => {
+export interface CardProps {
+  insights: string[];
+  emoji: string;
+}
+const Card: React.FC<CardProps> = ({insights, emoji}) => {
   const [currentInsight, setCurrentInsight] = useState(0);
   const changeInsight = () => {
     setCurrentInsight(
@@ -37,7 +35,7 @@ const Card: React.FC<
         padding: 2,
         borderRadius: 7,
       }}>
-      <TouchableOpacity onPress={changeInsight} style={styles.containerFake}>
+      <TouchableHighlight onPress={changeInsight} style={styles.containerFake}>
         <LinearGradient
           colors={['rgba(24, 24, 24, 1)', 'rgba(24, 24, 24, 0.2)']}
           style={[styles.container, styles.linearGradient]}>
@@ -50,7 +48,7 @@ const Card: React.FC<
             </Text>
           </View>
         </LinearGradient>
-      </TouchableOpacity>
+      </TouchableHighlight>
     </LinearGradient>
   );
 };
